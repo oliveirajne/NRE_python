@@ -46,110 +46,94 @@ def derivada_2dy(x,y):
 	return fx
 	
 def TRI(A, M):
-    TOLPIV, FAC = 0, 0
+    FAC = 0
     A = A
     TOLPIV = 1.e-11
     M1     = M-1
+
 	
-    for i in range(0, M1+1):
+    for i in range(0, M):
         if ( abs(A[i][i]) < TOLPIV ):
             print("Pivo muito pequeno.")
             break
         
         J1 = i + 1
         
-        for j in range(J1, M+1):
-#            if ( A[J,I]== 0.e0 ):
-            FAC = A[j][i]/A[i][i]
-            
-            # for k in range(J1, M+1):
-            #     A[j][k] = A[j][k] - A[i][k] * FAC
+        for j in range(J1, M):
+
+            FAC = A[i][j]/A[i][i]
+
+            for k in range(J1, M):
+
+                A[j][k] = A[j][k] - A[k][i] * FAC
 
     return 
 	
 def RHSUB(A, B, M, S):
-    # A = [2,2] 
-    # B = [2] 
-    # S = [2] 
+
     M1 = M-1
 
-    print('----')
-    print(A)
-    print(B)
-    print(M)
-    print(S)
-    print(M1)
-    print('----')
+
 
     for i in range(0, M):
         J1  = i + 1
         
         for j in range(J1, M):
-            # print('*')
-            # print(B[j])
-            # print(B[i])
-            # print(A[j][i])
-            # print(A[i][i])
-            # print('*')
+
             B[j] = B[j] - B[i]*A[j][i]/A[i][i]
-            print(B)
+
             S[M-1] = B[M-1]/A[M-1][M-1]
-            print(S)
-            print('**')
+
     for i in range(0, M):
         IB = M - 1
         J1 = i + 1 
         
         for j in range(J1, M):
-            print(B[IB-1])
-            print(A[IB-1][j-1])
-            print(S[j])
+
             B[IB-1] = B[IB-1] - A[IB-1][j-1]*S[j]
-            print(B)
-            print('%')
+
 
         S[IB-1] = B[IB-1]/A[IB-1][IB-1]
-    print(S)
-    print('&')
+
     return
 
 for i in range(0, N+1):
 
-    # J = [[derivada_1dx(x_i,y_i),derivada_1dy(x_i,y_i)], [derivada_2dx(x_i,y_i),derivada_2dy(x_i,y_i)]]
+    print(x_im1)
+    print(VAf_max)
+   
     J = [[derivada_1dx(x_i,y_i),derivada_2dx(x_i,y_i)], [derivada_1dy(x_i,y_i),derivada_2dy(x_i,y_i)]] 
-
-    # J[1,1] = derivada_1dx(x_i,y_i)
-    # J[1,2] = derivada_1dy(x_i,y_i)
-    # J[2,1] = derivada_2dx(x_i,y_i)
-    # J[2,2] = derivada_2dy(x_i,y_i)	
+	
     F = [-funcao_1(x_i,y_i),-funcao_2(x_i,y_i)]
-    # F[1] = -funcao_1(x_i,y_i)
-    # F[2] = -funcao_2(x_i,y_i)
 
-    # TRI(J, 2)
+    TRI(J, 2)
     RHSUB(J, F, 2, S)
 
     x_im1 = S[0] + x_i
+    print("x_im1 " + "{0:16e}".format(x_im1))
+    print("S[0] " + "{0:16e}".format(S[0]))
+    print("x_i "+"{0:16e}".format(x_i))
     y_im1 = S[1] + y_i
 
-    print(i)
-    print(S)
-    print(J)
-    print(F)
-    print(x_im1)
-    print(y_im1)
-
     VAf_1 = abs(funcao_1(x_im1,y_im1))
+
     VAf_2 = abs(funcao_2(x_im1,y_im1))
 
+    print(S)
+    print('aha')
+    print(x_im1)
+    print(y_im1)
     if ( VAf_1 < VAf_2):
         VAf_max = VAf_2
-    else:
+    else:        
         VAf_max = VAf_1
+        print('MANOOOOOOOOOOOOOOOO')
+        print(VAf_1)
+        print(VAf_2)
         
     VAS_1 = abs(S[0])
     VAS_2 = abs(S[1])
-
+    
     if ( VAS_1 < VAS_2):
         VAS_max = VAS_2
     else:
@@ -165,18 +149,17 @@ for i in range(0, N+1):
 
     d_1= VAS_max 
 
+    
     if (VAXY != 0.0e0): 
         d_1=d_1/VAXY
         if (d_1 <= e):
             if (VAf_max <= e):
+                
                 print("{0:5}".format(i), "{0:16e}".format(x_im1), "{0:16e}".format(y_im1), "{0:16e}".format(VAf_max), "{0:16e}".format(d_1))   
-            y_0 = 2.0e00 
-
-            e = 1.0e-6  
-            N = 10      
-            x_i = x_0
-            y_i = y_0
+                break
+ 
     x_i = x_im1 
     y_i = y_im1 
 
     print("{0:5}".format(i), "{0:16e}".format(x_im1), "{0:16e}".format(y_im1), "{0:16e}".format(VAf_max), "{0:16e}".format(d_1))
+    # print(i, x_im1, y_im1, VAf_max, d_1)
