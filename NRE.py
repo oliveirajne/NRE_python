@@ -50,7 +50,7 @@ def TRI(A, M):
 	
     for i in range(0, M):
         if ( abs(A[i][i]) < TOLPIV ):
-            print("Pivo muito pequeno.")
+            print('Pivo muito pequeno.')
             break
         
         J1 = i + 1
@@ -92,6 +92,8 @@ def RHSUB(A, B, M, S):
         S[IB-1] = B[IB-1]/A[IB-1][IB-1]
 
     return
+
+file = open('NRE.sai', 'w')
 
 for i in range(0, N+1):
 
@@ -136,12 +138,13 @@ for i in range(0, N+1):
         d_1=d_1/VAXY
         if (d_1 <= e):
             if (VAf_max <= e):
-                print("Critério de parada atingido!")
-                # print("{0:2}".format(i), "{0:16.5e}".format(x_im1), "{0:16.5e}".format(y_im1), "{0:16.5e}".format(VAf_max), "{0:16.5e}".format(d_1))   
+                file.write('Critério de parada atingido!')
+                # print('{0:2}'.format(i), '{0:16.5e}'.format(x_im1), '{0:16.5e}'.format(y_im1), '{0:16.5e}'.format(VAf_max), '{0:16.5e}'.format(d_1))   
                 break
     
     x_i = x_im1 
     y_i = y_im1 
 
-    print("{0:2}".format(i), "{0:16.5e}".format(x_im1), "{0:16.5e}".format(y_im1), "{0:16.5e}".format(VAf_max), "{0:16.5e}".format(d_1))
+    file.write('{0:2}'.format(i) + '{0:16.5e}'.format(x_im1) + '{0:16.5e}'.format(y_im1) + '{0:16.5e}'.format(VAf_max) + '{0:16.5e}'.format(d_1) + '\n')
 
+file.close()
